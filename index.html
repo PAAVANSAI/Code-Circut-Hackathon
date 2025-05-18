@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripTally - Travel Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="popup.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/docx@8.2.3/build/index.js"></script>
+</head>
+<body>
+    <div class="title-container">
+        <h1>T<span class="rupee-symbol">₹</span>ipTally</h1>
+    </div>
+
+    <nav class="navbar fade-in-1">
+        <div class="nav-brand">
+            <i class="fas fa-wallet"></i>
+            <span>T<span class="rupee-symbol">₹</span>ipTally</span>
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-link" data-page="expenses">
+                <i class="fas fa-receipt"></i>
+                <span>Expenses</span>
+            </a>
+            <a href="#" class="nav-link" data-page="analytics">
+                <i class="fas fa-chart-pie"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="#" class="nav-link" data-page="calendar">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span>
+            </a>
+            <a href="#" class="nav-link" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+        <div class="user-greeting">
+            <i class="fas fa-user"></i>
+            <span id="userName">Guest</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Dashboard Page -->
+        <div class="page active" id="dashboard">
+            <div class="budget-summary fade-in-2">
+                <div class="total-budget fade-in-3">
+                    <h2>Total Budget</h2>
+                    <input type="number" id="totalBudget" placeholder="Enter your total budget in ₹">
+                    <div class="budget-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="addToExisting">
+                            <span>Add to existing budget</span>
+                        </label>
+                    </div>
+                    <button onclick="setTotalBudget()">Set Budget</button>
+                </div>
+                <div class="current-total fade-in-4">
+                    <h2>Toatal Expenditure</h2>
+                    <p id="currentTotal">₹0.00</p>
+                </div>
+                <div class="remaining-budget fade-in-5">
+                    <h2>Remaining Budget</h2>
+                    <p id="remainingBudget">₹0.00</p>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="stat-card fade-in-6">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Food</h3>
+                    <p id="foodTotal">₹0.00</p>
+                    <div class="stat-progress">
+                        <div class="progress-bar" id="foodProgress"></div>
+                    </div>
+                </div>
+                <div class="stat-card fade-in-7">
+                    <i class="fas fa-plane"></i>
+                    <h3>Travel</h3>
+                    <p id="travelTotal">₹0.00</p>
+                    <div class="stat-progress">
+                        <div class="progress-bar" id="travelProgress"></div>
+                    </div>
+                </div>
+                <div class="stat-card fade-in-8">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>Shopping</h3>
+                    <p id="shoppingTotal">₹0.00</p>
+                    <div class="stat-progress">
+                        <div class="progress-bar" id="shoppingProgress"></div>
+                    </div>
+                </div>
+                <div class="stat-card fade-in-9">
+                    <i class="fas fa-bed"></i>
+                    <h3>Accommodation</h3>
+                    <p id="accommodationTotal">₹0.00</p>
+                    <div class="stat-progress">
+                        <div class="progress-bar" id="accommodationProgress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="recent-expenses fade-in-10">
+                    <h2>Recent Expenses</h2>
+                    <div class="recent-list" id="recentExpensesList">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="budget-insights fade-in-11">
+                    <h2>Budget Insights</h2>
+                    <div class="insights-container">
+                        <div class="insight-card fade-in-12">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Daily Average</h3>
+                            <p id="dailyAverage">₹0.00</p>
+                        </div>
+                        <div class="insight-card fade-in-13">
+                            <i class="fas fa-calendar-check"></i>
+                            <h3>Most Expensive Day</h3>
+                            <p id="mostExpensiveDay">-</p>
+                        </div>
+                        <div class="insight-card fade-in-14">
+                            <i class="fas fa-tags"></i>
+                            <h3>Top Category</h3>
+                            <p id="topCategory">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="savings-goal fade-in-15">
+                <h2>Savings Goal</h2>
+                <div class="goal-progress">
+                    <div class="goal-info">
+                        <input type="number" id="savingsGoal" placeholder="Enter savings goal in ₹">
+                        <button onclick="setSavingsGoal()">Set Goal</button>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="savingsProgress"></div>
+                    </div>
+                    <p id="savingsStatus">No savings goal set</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses Page -->
+        <div class="page" id="expenses">
+            <div class="expense-form fade-in-2">
+                <h2>Add New Expense</h2>
+                <div class="form-grid">
+                    <div class="form-group fade-in-3">
+                        <input type="text" id="expenseName" placeholder="Expense name">
+                    </div>
+                    <div class="form-group fade-in-4">
+                        <input type="number" id="expenseAmount" placeholder="Amount">
+                    </div>
+                    <div class="form-group fade-in-5">
+                        <div class="category-input-group">
+                            <select id="expenseCategory">
+                                <option value="food">Food</option>
+                                <option value="travel">Travel</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="accommodation">Accommodation</option>
+                                <option value="activities">Activities</option>
+                                <option value="other">Other</option>
+                                <option value="custom">+ Add Custom Category</option>
+                            </select>
+                            <div id="customCategoryInput" class="custom-category-input" style="display: none;">
+                                <input type="text" id="newCategory" placeholder="Enter new category name">
+                                <button onclick="addCustomCategory()" class="add-category-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group fade-in-6">
+                        <input type="date" id="expenseDate">
+                    </div>
+                    <div class="form-group full-width fade-in-7">
+                        <textarea id="expenseNotes" placeholder="Add notes (optional)"></textarea>
+                    </div>
+                    <div class="form-group full-width fade-in-8">
+                        <button onclick="addExpense()">Add Expense</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expenses-list fade-in-9">
+                <h2>Expenses</h2>
+                <div class="list-controls fade-in-10">
+                    <select id="filterCategory" onchange="filterExpenses()">
+                        <option value="all">All Categories</option>
+                        <option value="food">Food</option>
+                        <option value="travel">Travel</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="accommodation">Accommodation</option>
+                        <option value="activities">Activities</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select id="filterDate" onchange="filterExpenses()">
+                        <option value="all">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                    <button onclick="exportData()" class="export-btn">
+                        <i class="fas fa-download"></i>
+                        Export Data
+                    </button>
+                </div>
+                <table id="expensesTable">
+                    <thead class="fade-in-11">
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Notes</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics Page -->
+        <div class="page" id="analytics">
+            <div class="analytics-summary fade-in-2">
+                <div class="summary-card fade-in-3">
+                    <h3>Total Expenses</h3>
+                    <p id="analyticsTotalSpent">₹0.00</p>
+                </div>
+                <div class="summary-card fade-in-4">
+                    <h3>Average Daily Spend</h3>
+                    <p id="analyticsDailyAverage">₹0.00</p>
+                </div>
+                <div class="summary-card fade-in-5">
+                    <h3>Most Spent Category</h3>
+                    <p id="analyticsTopCategory">-</p>
+                </div>
+                <div class="summary-card fade-in-6">
+                    <h3>Budget Utilization</h3>
+                    <p id="analyticsBudgetUtilization">0%</p>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="analytics-main fade-in-7">
+                    <div class="chart-container">
+                        <h3>Budget vs Actual</h3>
+                        <canvas id="budgetComparisonChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="analytics-side fade-in-8">
+                    <div class="chart-container">
+                        <h3>Category Distribution</h3>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Daily Expenses</h3>
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Page -->
+        <div class="page" id="calendar">
+            <div class="calendar-controls fade-in-2">
+                <div class="view-selector">
+                    <button class="view-btn active" data-view="month">Month</button>
+                    <button class="view-btn" data-view="year">Year</button>
+                </div>
+                <div class="calendar-navigation">
+                    <button id="prevPeriod"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="currentPeriod">September 2023</h2>
+                    <button id="nextPeriod"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-grid fade-in-3" id="calendarGrid">
+                    <!-- Calendar will be generated by JavaScript -->
+                </div>
+                
+                <div class="calendar-sidebar fade-in-4">
+                    <div class="expense-summary">
+                        <h3>Expense Summary</h3>
+                        <div class="summary-stats">
+                            <div class="stat">
+                                <span>Total Expenses</span>
+                                <p id="periodTotal">₹0.00</p>
+                            </div>
+                            <div class="stat">
+                                <span>Average per Day</span>
+                                <p id="periodAverage">₹0.00</p>
+                            </div>
+                            <div class="stat">
+                                <span>Most Expensive Day</span>
+                                <p id="periodMostExpensive">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="page" id="settings">
+            <div class="settings-section fade-in-2">
+                <h2>Appearance</h2>
+                <div class="setting-item fade-in-3">
+                    <label>Theme</label>
+                    <div class="theme-settings">
+                        <select id="themeSelect" onchange="changeTheme()">
+                            <option value="light">Light Theme</option>
+                            <option value="dark">Dark Theme</option>
+                            <option value="system">System Default</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-item fade-in-4">
+                    <label>Accent Color</label>
+                    <div class="color-settings">
+                        <input type="color" id="accentColor" onchange="updateAccentColor()">
+                        <button onclick="resetAccentColor()" class="reset-btn">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section fade-in-5">
+                <h2>Currency & Region</h2>
+                <div class="setting-item fade-in-5">
+                    <label>Currency</label>
+                    <div class="currency-settings">
+                        <select id="currencySelect" onchange="updateCurrency()">
+                            <option value="INR">Indian Rupee (₹)</option>
+                            <option value="USD">US Dollar ($)</option>
+                            <option value="EUR">Euro (€)</option>
+                            <option value="GBP">British Pound (£)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-item fade-in-6">
+                    <label>Date Format</label>
+                    <div class="date-format-settings">
+                        <select id="dateFormatSelect" onchange="updateDateFormat()">
+                            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section fade-in-6">
+                <h2>Notifications</h2>
+                <div class="setting-item fade-in-6">
+                    <label>Budget Alerts</label>
+                    <div class="notification-settings">
+                        <div class="toggle-setting">
+                            <span>Budget Threshold Alerts</span>
+                            <label class="switch">
+                                <input type="checkbox" id="budgetAlertsToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section fade-in-7">
+                <h2>Budget Settings</h2>
+                <div class="setting-item fade-in-7">
+                    <label>Budget Alert Thresholds</label>
+                    <div class="threshold-inputs">
+                        <input type="number" id="alert80" placeholder="80%" value="80">
+                        <input type="number" id="alert90" placeholder="90%" value="90">
+                        <input type="number" id="alert100" placeholder="100%" value="100">
+                    </div>
+                </div>
+                <div class="setting-item fade-in-8">
+                    <label>Category Budgets</label>
+                    <div id="categoryBudgets">
+                        <!-- Category budgets will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section fade-in-8">
+                <h2>Data Management</h2>
+                <div class="setting-item fade-in-8">
+                    <label>Export & Backup</label>
+                    <div class="data-management-buttons">
+                        <button onclick="exportData()" class="export-btn">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </button>
+                    </div>
+                </div>
+                <div class="setting-item fade-in-9">
+                    <label>Data Cleanup</label>
+                    <div class="data-cleanup-options">
+                        <button onclick="clearAllData()" class="danger-btn">
+                            <i class="fas fa-trash"></i>
+                            Clear All Data
+                        </button>
+                        <button onclick="resetSettings()" class="warning-btn">
+                            <i class="fas fa-undo"></i>
+                            Reset Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section fade-in-9">
+                <h2>Custom Categories</h2>
+                <div class="custom-categories-list">
+                    <div class="category-management">
+                        <div class="existing-categories">
+                            <h3>Your Categories</h3>
+                            <div id="customCategoriesList" class="categories-grid">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="clearDataPopup" class="expense-summary">
+        <div class="welcome-header">
+            <i class="fas fa-user-circle"></i>
+            <h2>Welcome to TripTally!</h2>
+            <p>Let's get started by setting up your profile</p>
+        </div>
+        <div class="expense-details">
+            <div class="form-group">
+                <label for="clearDataName">Your Name:</label>
+                <input type="text" id="clearDataName" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="clearDataTheme">Choose Your Theme:</label>
+                <select id="clearDataTheme" required>
+                    <option value="light">Light Theme</option>
+                    <option value="dark" selected>Dark Theme</option>
+                </select>
+            </div>
+            <div class="expense-actions">
+                <button onclick="confirmClearData()" class="primary-btn">
+                    <i class="fas fa-check"></i>
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
