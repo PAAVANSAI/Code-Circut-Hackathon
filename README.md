@@ -34,7 +34,6 @@ A modern, responsive web application for tracking and managing personal expenses
 - Edge (latest)
 
 
-A modern, responsive web application for tracking and managing personal expenses with a beautiful user interface and theme support.
 
 ## Features
 
