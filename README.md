@@ -26,9 +26,13 @@ A modern, responsive web application for tracking and managing personal expenses
 - Expense items with hover effects
 - Mobile-optimized layouts with stacked components
 
-## Features
+## Browser Support
 
-// ... existing code ...# Expense Tracker Web Application
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
 
 A modern, responsive web application for tracking and managing personal expenses with a beautiful user interface and theme support.
 
@@ -51,12 +55,6 @@ A modern, responsive web application for tracking and managing personal expenses
 - Form validation and data management
 - Cross-browser compatibility
 
-## Getting Started
-
-1. Clone the repository
-2. Open `index.html` in your web browser
-3. Start tracking your expenses!
-
 ## Browser Support
 
 - Chrome (latest)
@@ -64,10 +62,4 @@ A modern, responsive web application for tracking and managing personal expenses
 - Safari (latest)
 - Edge (latest)
 
-## Contributing
 
-Feel free to submit issues and enhancement requests!
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
